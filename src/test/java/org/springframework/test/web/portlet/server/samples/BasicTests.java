@@ -3,35 +3,25 @@ package org.springframework.test.web.portlet.server.samples;
 import static org.springframework.test.web.portlet.server.request.PortletMockMvcRequestBuilders.*;
 import static org.springframework.test.web.portlet.server.setup.PortletMockMvcBuilders.*;
 
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 import org.junit.Test;
-import org.springframework.stereotype.Controller;
-import org.springframework.test.web.Person;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:testApplicationContext.xml"})	
 public class BasicTests {
+	
+	@Autowired
+	private ApplicationContext applicationContext;
 	
 	@Test
 	public void testBasicPortlet() throws Exception {
-		existingApplicationContext(null).build()
+		existingApplicationContext(applicationContext).build()
 			.perform(render().param("test", "test"))
 				.andReturn();
-	}
-	
-	@Controller
-	@RequestMapping("VIEW")
-	private static class PersonController {
-		
-		@RequestMapping
-		public String view(RenderRequest request, RenderResponse response, Model model) {
-			Person person = new Person();
-			model.addAttribute(person);
-			return "view";
-		}
-		
 	}
 	
 }

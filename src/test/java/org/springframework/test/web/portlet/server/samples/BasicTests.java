@@ -17,7 +17,7 @@ public class BasicTests {
 	@Test
 	public void testBasicPortlet() throws Exception {
 		existingApplicationContext(null).build()
-			.performRender(render().param("test", "test"))
+			.perform(render().param("test", "test"))
 				.andReturn();
 	}
 	

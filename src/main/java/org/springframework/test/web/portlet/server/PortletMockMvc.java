@@ -25,7 +25,7 @@ public class PortletMockMvc {
 		this.portlet = portlet;
 	}
 
-	public PortletResultActions performRender(RenderRequestBuilder builder) throws Exception {
+	public PortletResultActions perform(RenderRequestBuilder builder) throws Exception {
 		MockRenderRequest request = builder.buildRequest();
 		MockRenderResponse response = new MockRenderResponse();
 		
@@ -38,7 +38,7 @@ public class PortletMockMvc {
 		return new DefaultResultActions(mvcResult);
 	}
 	
-	public PortletResultActions performAction(ActionRequestBuilder builder) throws Exception {
+	public PortletResultActions perform(ActionRequestBuilder builder) throws Exception {
 		MockActionRequest request = builder.buildRequest();
 		MockActionResponse response = new MockActionResponse();
 		
@@ -51,7 +51,7 @@ public class PortletMockMvc {
 		return new DefaultResultActions(mvcResult);
 	}
 	
-	public PortletResultActions performResource(ResourceRequestBuilder builder) throws Exception {
+	public PortletResultActions perform(ResourceRequestBuilder builder) throws Exception {
 		MockResourceRequest request = builder.buildRequest();
 		MockResourceResponse response = new MockResourceResponse();
 		

@@ -1,8 +1,5 @@
 package org.springframework.test.web.portlet.server;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-
 import org.springframework.mock.web.portlet.MockPortletRequest;
 import org.springframework.mock.web.portlet.MockPortletResponse;
 import org.springframework.web.portlet.HandlerInterceptor;
@@ -27,11 +24,11 @@ public class DefaultPortletMvcResult implements PortletMvcResult {
 		this.response = response;
 	}
 
-	public PortletRequest getRequest() {
+	public MockPortletRequest getRequest() {
 		return request;
 	}
 
-	public PortletResponse getResponse() {
+	public MockPortletResponse getResponse() {
 		return response;
 	}
 

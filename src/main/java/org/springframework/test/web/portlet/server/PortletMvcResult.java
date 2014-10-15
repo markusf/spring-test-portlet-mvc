@@ -1,16 +1,15 @@
 package org.springframework.test.web.portlet.server;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-
+import org.springframework.mock.web.portlet.MockPortletRequest;
+import org.springframework.mock.web.portlet.MockPortletResponse;
 import org.springframework.web.portlet.HandlerInterceptor;
 import org.springframework.web.portlet.ModelAndView;
 
 public interface PortletMvcResult {
 	
-	PortletRequest getRequest();
+	MockPortletRequest getRequest();
 	
-	PortletResponse getResponse();
+	MockPortletResponse getResponse();
 	
 	/**
 	 * Return the {@code ModelAndView} prepared by the handler.

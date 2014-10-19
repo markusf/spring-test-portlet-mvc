@@ -43,7 +43,10 @@ public class ModelResultMatchers {
 	 */
 	protected ModelResultMatchers() {
 	}
-
+	
+	public static ModelResultMatchers model() {
+		return new ModelResultMatchers();
+	}
 	/**
 	 * Assert a model attribute value with the given Hamcrest {@link Matcher}.
 	 */

@@ -13,7 +13,7 @@ import org.springframework.test.web.portlet.server.DefaultPortletMvcResult;
 import org.springframework.test.web.portlet.server.PortletMvcResult;
 
 import static org.junit.Assert.*;
-import static org.springframework.test.web.portlet.server.result.StatusResultMatchers.*;
+import static org.springframework.test.web.portlet.server.result.PortletMockMvcResultMatchers.*;
 
 public class StatusResultMatcherTests {
 	

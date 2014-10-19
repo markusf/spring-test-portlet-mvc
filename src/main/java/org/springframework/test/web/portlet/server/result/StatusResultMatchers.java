@@ -14,10 +14,6 @@ public class StatusResultMatchers {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static StatusResultMatchers status() {
-		return new StatusResultMatchers();
-	}
-	
     public PortletResultMatcher isOk() {
         return matcher(HttpStatus.OK);
     }

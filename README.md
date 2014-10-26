@@ -6,6 +6,9 @@ The project is still work in progress, but the general API (since derived from s
 
 Feel free to contribute and send me a pull request or drop a message.
 
+**Update:**
+It is now also possible to test without an existing Application Context (see StandaloneAppContextTest)
+
 ##Sample
 
 ###Controller

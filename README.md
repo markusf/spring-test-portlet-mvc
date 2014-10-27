@@ -9,6 +9,19 @@ Feel free to contribute and send me a pull request or drop a message.
 **Update:**
 It is now also possible to test without an existing Application Context (see StandaloneAppContextTest)
 
+**Update 2:**
+**The project has been published to maven central and can now be easily referenced in your project of choice!**
+
+##Maven Integration
+The project can be obtained trough the maven central repository.
+```
+<dependency>
+  <groupId>com.github.markusf</groupId>
+  <artifactId>spring-test-portlet-mvc</artifactId>
+  <version>0.1.0</version>
+  <scope>test</scope>
+</dependency>
+```
 ##Sample
 
 ###Controller

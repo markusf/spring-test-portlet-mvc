@@ -25,23 +25,12 @@ import org.springframework.test.web.portlet.server.PortletMvcResult;
 import org.springframework.test.web.portlet.server.PortletResultMatcher;
 import org.springframework.web.portlet.ModelAndView;
 
-/**
- * Factory for assertions on the selected view. An instance of this class is
- * typically accessed via {@link MockMvcResultMatchers#view()}.
- */
 public class ViewResultMatchers {
 
 
-	/**
-	 * Protected constructor.
-	 * Use {@link MockMvcResultMatchers#view()}.
-	 */
 	protected ViewResultMatchers() {
 	}
 
-	/**
-	 * Assert the selected view name with the given Hamcrest {@link Matcher}.
-	 */
 	public PortletResultMatcher name(final Matcher<? super String> matcher) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult result) throws Exception {
@@ -52,9 +41,6 @@ public class ViewResultMatchers {
 		};
 	}
 
-	/**
-	 * Assert the selected view name.
-	 */
 	public PortletResultMatcher name(final String name) {
 		return name(Matchers.equalTo(name));
 	}

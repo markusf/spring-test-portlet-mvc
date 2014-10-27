@@ -27,26 +27,12 @@ import org.springframework.test.web.portlet.server.PortletResultMatcher;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.portlet.ModelAndView;
 
-/**
- * Factory for assertions on the model. An instance of this class is
- * typically accessed via {@link MockMvcPortletResultMatchers#model()}.
- *
- * @author Rossen Stoyanchev
- * @author Markus Feindler
- */
 public class ModelResultMatchers {
 
 
-	/**
-	 * Protected constructor.
-	 * Use {@link MockMvcPortletResultMatchers#model()}.
-	 */
 	protected ModelResultMatchers() {
 	}
 	
-	/**
-	 * Assert a model attribute value with the given Hamcrest {@link Matcher}.
-	 */
 	public <T> PortletResultMatcher attribute(final String name, final Matcher<T> matcher) {
 		return new PortletResultMatcher() {
 			@SuppressWarnings("unchecked")
@@ -58,16 +44,10 @@ public class ModelResultMatchers {
 		};
 	}
 
-	/**
-	 * Assert a model attribute value.
-	 */
 	public PortletResultMatcher attribute(String name, Object value) {
 		return attribute(name, Matchers.equalTo(value));
 	}
 
-	/**
-	 * Assert the given model attributes exist.
-	 */
 	public PortletResultMatcher attributeExists(final String... names) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult result) throws Exception {
@@ -79,9 +59,6 @@ public class ModelResultMatchers {
 		};
 	}
 
-	/**
-	 * Assert the given model attribute(s) have errors.
-	 */
 	public PortletResultMatcher attributeHasErrors(final String... names) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult PortletMvcResult) throws Exception {
@@ -94,9 +71,6 @@ public class ModelResultMatchers {
 		};
 	}
 
-	/**
-	 * Assert the given model attribute(s) do not have errors.
-	 */
 	public PortletResultMatcher attributeHasNoErrors(final String... names) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult PortletMvcResult) throws Exception {
@@ -109,9 +83,6 @@ public class ModelResultMatchers {
 		};
 	}
 
-	/**
-	 * Assert the given model attribute field(s) have errors.
-	 */
 	public PortletResultMatcher attributeHasFieldErrors(final String name, final String... fieldNames) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult PortletMvcResult) throws Exception {
@@ -126,9 +97,6 @@ public class ModelResultMatchers {
 		};
 	}
 
-	/**
-	 * Assert the model has no errors.
-	 */
 	public <T> PortletResultMatcher hasNoErrors() {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult result) throws Exception {
@@ -142,9 +110,6 @@ public class ModelResultMatchers {
 		};
 	}
 
-	/**
-	 * Assert the number of model attributes.
-	 */
 	public <T> PortletResultMatcher size(final int size) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult result) throws Exception {

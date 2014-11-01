@@ -22,7 +22,12 @@ The project can be obtained trough the maven central repository.
   <scope>test</scope>
 </dependency>
 ```
-##Sample
+
+##Sample (Standalone Application Context)
+
+see https://github.com/markusf/spring-test-portlet-mvc/blob/master/src/test/java/org/springframework/test/web/portlet/server/samples/StandaloneAppContextTest.java
+
+##Sample (Existing Application Context)
 
 ###Controller
 ```java

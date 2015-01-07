@@ -2,11 +2,17 @@ package org.springframework.test.web.portlet.server.request;
 
 import org.springframework.mock.web.portlet.MockActionRequest;
 
-public class MockActionRequestBuilder implements ActionRequestBuilder {
+public class MockActionRequestBuilder extends MockPortletRequestBuilder implements
+        ActionRequestBuilder {
 
-	public MockActionRequest buildRequest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public MockActionRequestBuilder param(String name, String... values) {
+        addParameter(name, values);
+        return this;
+    }
 
+    public MockActionRequest buildRequest() {
+        MockActionRequest request = new MockActionRequest();
+        setParameters(request);
+        return request;
+    }
 }

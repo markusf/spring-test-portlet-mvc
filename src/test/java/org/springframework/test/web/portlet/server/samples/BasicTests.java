@@ -1,8 +1,8 @@
 package org.springframework.test.web.portlet.server.samples;
 
 import static org.springframework.test.web.portlet.server.request.PortletMockMvcRequestBuilders.*;
-import static org.springframework.test.web.portlet.server.setup.PortletMockMvcBuilders.*;
 import static org.springframework.test.web.portlet.server.result.PortletMockMvcResultMatchers.*;
+import static org.springframework.test.web.portlet.server.setup.PortletMockMvcBuilders.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +22,19 @@ public class BasicTests {
 	public void testBasicPortlet() throws Exception {
 		existingApplicationContext(applicationContext).build()
 			.perform(render().param("test", "test"))
-			.andExpect(view().name("view"))
+			.andExpect(view().name("viewPerson"))
 			.andExpect(model().attributeExists("person"))
 			.andReturn();
 	}
 	
+    @Test
+    public void testAction() throws Exception {
+        existingApplicationContext(applicationContext).build()
+            .perform(action().param("action", "createNew"))
+            .andExpect(model().attributeExists("person"))
+            .andExpect(renderParameters().count(1))
+            .andExpect(renderParameters().exists("view"))
+            .andExpect(renderParameters().has("view", "editPersonForm"))
+            .andReturn();
+    }
 }

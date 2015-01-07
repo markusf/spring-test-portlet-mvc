@@ -16,31 +16,37 @@
 
 package org.springframework.test.web.portlet.server.result;
 
-import static org.springframework.test.web.AssertionErrors.assertEquals;
-import static org.springframework.test.web.AssertionErrors.assertTrue;
+import static org.springframework.test.web.AssertionErrors.*;
+
+import java.util.Map;
+
+import javax.portlet.PortletSession;
+import javax.portlet.StateAwareResponse;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.springframework.test.web.portlet.server.PortletMvcResult;
 import org.springframework.test.web.portlet.server.PortletResultMatcher;
+import org.springframework.ui.ExtendedModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.portlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
 public class ModelResultMatchers {
 
 
 	protected ModelResultMatchers() {
 	}
-	
+
 	public <T> PortletResultMatcher attribute(final String name, final Matcher<T> matcher) {
 		return new PortletResultMatcher() {
 			@SuppressWarnings("unchecked")
-			public void match(PortletMvcResult result) throws Exception {
-				ModelAndView mav = result.getModelAndView();
-				assertTrue("No ModelAndView found", mav != null);
-				MatcherAssert.assertThat("Model attribute '" + name + "'", (T) mav.getModel().get(name), matcher);
-			}
+            public void match(PortletMvcResult result) throws Exception {
+                Map<String, Object> model = getModel(result);
+                MatcherAssert.assertThat("Model attribute '" + name + "'", (T) model.get(name),
+                        matcher);
+            }
 		};
 	}
 
@@ -51,7 +57,6 @@ public class ModelResultMatchers {
 	public PortletResultMatcher attributeExists(final String... names) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult result) throws Exception {
-				assertTrue("No ModelAndView found", result.getModelAndView() != null);
 				for (String name : names) {
 					attribute(name, Matchers.notNullValue()).match(result);
 				}
@@ -61,10 +66,10 @@ public class ModelResultMatchers {
 
 	public PortletResultMatcher attributeHasErrors(final String... names) {
 		return new PortletResultMatcher() {
-			public void match(PortletMvcResult PortletMvcResult) throws Exception {
-				ModelAndView mav = getModelAndView(PortletMvcResult);
+			public void match(PortletMvcResult portletMvcResult) throws Exception {
+			    Map<String, Object> model = getModel(portletMvcResult);
 				for (String name : names) {
-					BindingResult result = getBindingResult(mav, name);
+					BindingResult result = getBindingResult(model, name);
 					assertTrue("No errors for attribute: " + name, result.hasErrors());
 				}
 			}
@@ -74,9 +79,9 @@ public class ModelResultMatchers {
 	public PortletResultMatcher attributeHasNoErrors(final String... names) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult PortletMvcResult) throws Exception {
-				ModelAndView mav = getModelAndView(PortletMvcResult);
+			    Map<String, Object> model = getModel(PortletMvcResult);
 				for (String name : names) {
-					BindingResult result = getBindingResult(mav, name);
+					BindingResult result = getBindingResult(model, name);
 					assertTrue("No errors for attribute: " + name, !result.hasErrors());
 				}
 			}
@@ -86,8 +91,8 @@ public class ModelResultMatchers {
 	public PortletResultMatcher attributeHasFieldErrors(final String name, final String... fieldNames) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult PortletMvcResult) throws Exception {
-				ModelAndView mav = getModelAndView(PortletMvcResult);
-				BindingResult result = getBindingResult(mav, name);
+			    Map<String, Object> model = getModel(PortletMvcResult);
+				BindingResult result = getBindingResult(model, name);
 				assertTrue("No errors for attribute: '" + name + "'", result.hasErrors());
 				for (final String fieldName : fieldNames) {
 					assertTrue("No errors for field: '" + fieldName + "' of attribute: " + name,
@@ -100,8 +105,8 @@ public class ModelResultMatchers {
 	public <T> PortletResultMatcher hasNoErrors() {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult result) throws Exception {
-				ModelAndView mav = getModelAndView(result);
-				for (Object value : mav.getModel().values()) {
+			    Map<String, Object> model = getModel(result);
+				for (Object value : model.values()) {
 					if (value instanceof BindingResult) {
 						assertTrue("Unexpected binding error(s): " + value, !((BindingResult) value).hasErrors());
 					}
@@ -113,9 +118,9 @@ public class ModelResultMatchers {
 	public <T> PortletResultMatcher size(final int size) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult result) throws Exception {
-				ModelAndView mav = getModelAndView(result);
+			    Map<String, Object> model = getModel(result);
 				int actual = 0;
-				for (String key : mav.getModel().keySet()) {
+				for (String key : model.keySet()) {
 					if (!key.startsWith(BindingResult.MODEL_KEY_PREFIX)) {
 						actual++;
 					}
@@ -125,14 +130,29 @@ public class ModelResultMatchers {
 		};
 	}
 
-	private ModelAndView getModelAndView(PortletMvcResult PortletMvcResult) {
-		ModelAndView mav = PortletMvcResult.getModelAndView();
-		assertTrue("No ModelAndView found", mav != null);
-		return mav;
-	}
+    private Map<String, Object> getModel(PortletMvcResult portletMvcResult) {
+        ModelAndView mav = portletMvcResult.getModelAndView();
+        Map<String, Object> model = null;
+        if (mav != null) {
+            model = mav.getModel();
+        } else {
+            if (portletMvcResult.getResponse() instanceof StateAwareResponse) {
+                PortletSession session = portletMvcResult.getRequest().getPortletSession(false);
+                if (session != null) {
+                    ExtendedModelMap implicitModel = (ExtendedModelMap) session
+                            .getAttribute(AnnotationMethodHandlerAdapter.IMPLICIT_MODEL_SESSION_ATTRIBUTE);
+                    if (implicitModel != null) {
+                        model = implicitModel.asMap();
+                    }
+                }
+            }
+        }
+        assertTrue("No Model found", model != null);
+        return model;
+    }
 
-	private BindingResult getBindingResult(ModelAndView mav, String name) {
-		BindingResult result = (BindingResult) mav.getModel().get(BindingResult.MODEL_KEY_PREFIX + name);
+	private BindingResult getBindingResult(Map<String, Object> model, String name) {
+		BindingResult result = (BindingResult) model.get(BindingResult.MODEL_KEY_PREFIX + name);
 		assertTrue("No BindingResult for attribute: " + name, result != null);
 		return result;
 	}

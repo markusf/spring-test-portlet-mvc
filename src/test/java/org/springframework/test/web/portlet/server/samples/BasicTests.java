@@ -32,6 +32,7 @@ public class BasicTests {
         existingApplicationContext(applicationContext).build()
             .perform(action().param("action", "createNew"))
             .andExpect(model().attributeExists("person"))
+            .andExpect(preferences().count(0))
             .andExpect(renderParameters().count(1))
             .andExpect(renderParameters().exists("view"))
             .andExpect(renderParameters().has("view", "editPersonForm"))

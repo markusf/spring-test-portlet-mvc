@@ -17,4 +17,8 @@ public final class PortletMockMvcResultMatchers {
     public static RenderParametersResultMatchers renderParameters() {
         return new RenderParametersResultMatchers();
     }
+
+    public static PreferencesResultMatchers preferences() {
+        return new PreferencesResultMatchers();
+    }
 }

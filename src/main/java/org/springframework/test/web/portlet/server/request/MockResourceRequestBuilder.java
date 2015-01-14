@@ -1,5 +1,8 @@
 package org.springframework.test.web.portlet.server.request;
 
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
+
 import org.springframework.mock.web.portlet.MockResourceRequest;
 
 public class MockResourceRequestBuilder extends MockPortletRequestBuilder implements
@@ -10,9 +13,19 @@ public class MockResourceRequestBuilder extends MockPortletRequestBuilder implem
         return this;
     }
 
+    public MockResourceRequestBuilder mode(PortletMode portletMode) {
+        setPortletMode(portletMode);
+        return this;
+    }
+
+    public MockResourceRequestBuilder windowState(WindowState windowState) {
+        setWindowState(windowState);
+        return this;
+    }
+
     public MockResourceRequest buildRequest() {
         MockResourceRequest request = new MockResourceRequest();
-        setParameters(request);
+        setAll(request);
         return request;
     }
 

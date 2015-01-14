@@ -4,6 +4,9 @@ import static org.springframework.test.web.portlet.server.request.PortletMockMvc
 import static org.springframework.test.web.portlet.server.result.PortletMockMvcResultMatchers.*;
 import static org.springframework.test.web.portlet.server.setup.PortletMockMvcBuilders.*;
 
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +32,15 @@ public class BasicTests {
 	
     @Test
     public void testAction() throws Exception {
-        existingApplicationContext(applicationContext).build()
-            .perform(action().param("action", "createNew"))
-            .andExpect(model().attributeExists("person"))
-            .andExpect(preferences().count(0))
-            .andExpect(renderParameters().count(1))
-            .andExpect(renderParameters().exists("view"))
-            .andExpect(renderParameters().has("view", "editPersonForm"))
-            .andReturn();
+        existingApplicationContext(applicationContext)
+                .build()
+                .perform(action()
+                        .mode(PortletMode.VIEW)
+                        .windowState(WindowState.NORMAL)
+                        .param("action", "createNew"))
+                .andExpect(model().attributeExists("person")).andExpect(preferences().count(0))
+                .andExpect(renderParameters().count(1))
+                .andExpect(renderParameters().exists("view"))
+                .andExpect(renderParameters().has("view", "editPersonForm")).andReturn();
     }
 }

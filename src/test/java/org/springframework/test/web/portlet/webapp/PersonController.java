@@ -13,16 +13,16 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 @Controller
-@RequestMapping("VIEW") 
+@RequestMapping("VIEW")
 public class PersonController {
-	
+
 	@RenderMapping
 	public String view(RenderRequest request, RenderResponse response, Model model) {
 		Person person = new Person();
 		model.addAttribute(person);
 		return "viewPerson";
 	}
-	
+
 	@ActionMapping(params="action=createNew")
     public void createNew(ActionRequest actionRequest, ActionResponse actionResponse, Model model) {
         Person person = new Person();

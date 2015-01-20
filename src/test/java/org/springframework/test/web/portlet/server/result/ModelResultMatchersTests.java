@@ -70,6 +70,16 @@ public class ModelResultMatchersTests {
 		this.matchers.attributeExists("bad").match(this.mvcResult);
 	}
 
+    @Test
+    public void attributeDoesNotExist() throws Exception {
+        this.matchers.attributeDoesNotExist("nope", "alien").match(this.mvcResult);
+    }
+
+    @Test(expected=AssertionError.class)
+    public void attributeDoesNotExists_exist() throws Exception {
+        this.matchers.attributeExists("good", "bad").match(this.mvcResult);
+    }
+
 	@Test
 	public void attribute_equal() throws Exception {
 		this.matchers.attribute("good", is("good")).match(this.mvcResult);
@@ -95,7 +105,7 @@ public class ModelResultMatchersTests {
 		this.matchers.attributeHasErrors("date").match(this.mvcResultWithError);
 	}
 
-	@Test(expected=AssertionError.class)
+    @Test(expected=IllegalStateException.class)
 	public void attributeHasErrors_withoutErrors() throws Exception {
 		this.matchers.attributeHasErrors("good").match(this.mvcResultWithError);
 	}
@@ -105,7 +115,7 @@ public class ModelResultMatchersTests {
 		this.matchers.attributeHasNoErrors("good").match(this.mvcResult);
 	}
 
-	@Test(expected=AssertionError.class)
+    @Test(expected=IllegalStateException.class)
 	public void attributeHasNoErrors_withoutAttribute() throws Exception {
 		this.matchers.attributeHasNoErrors("missing").match(this.mvcResultWithError);
 	}
@@ -120,12 +130,12 @@ public class ModelResultMatchersTests {
 		this.matchers.attributeHasFieldErrors("date", "time").match(this.mvcResultWithError);
 	}
 
-	@Test(expected=AssertionError.class)
+    @Test(expected=IllegalStateException.class)
 	public void attributeHasFieldErrors_withoutAttribute() throws Exception {
 		this.matchers.attributeHasFieldErrors("missing", "bad").match(this.mvcResult);
 	}
 
-	@Test(expected=AssertionError.class)
+	@Test(expected=IllegalStateException.class)
 	public void attributeHasFieldErrors_withoutErrorsForAttribute() throws Exception {
 		this.matchers.attributeHasFieldErrors("date", "time").match(this.mvcResult);
 	}

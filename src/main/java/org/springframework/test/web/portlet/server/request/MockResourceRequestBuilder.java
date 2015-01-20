@@ -3,9 +3,10 @@ package org.springframework.test.web.portlet.server.request;
 import javax.portlet.PortletMode;
 import javax.portlet.WindowState;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.mock.web.portlet.MockResourceRequest;
 
-public class MockResourceRequestBuilder extends MockPortletRequestBuilder implements
+public class MockResourceRequestBuilder extends MockClientDataRequestBuilder implements
         ResourceRequestBuilder {
 
     public MockResourceRequestBuilder param(String name, String... values) {
@@ -20,6 +21,11 @@ public class MockResourceRequestBuilder extends MockPortletRequestBuilder implem
 
     public MockResourceRequestBuilder windowState(WindowState windowState) {
         setWindowState(windowState);
+        return this;
+    }
+
+    public MockResourceRequestBuilder method(HttpMethod method) {
+        setMethod(method);
         return this;
     }
 

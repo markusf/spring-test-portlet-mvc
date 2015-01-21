@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.portlet.PortletSession;
 import javax.portlet.StateAwareResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -154,7 +155,7 @@ public class ModelResultMatchers {
                 // check if there are action exceptions
                 assertTrue(
                         "No actionExceptions expected, but got: "
-                                + arrayToString(response.getRenderParameterMap().get(
+                                + StringUtils.join(response.getRenderParameterMap().get(
                                         DispatcherPortlet.ACTION_EXCEPTION_RENDER_PARAMETER)),
                         !response.getRenderParameterMap().containsKey(
                                 DispatcherPortlet.ACTION_EXCEPTION_RENDER_PARAMETER));
@@ -171,19 +172,5 @@ public class ModelResultMatchers {
         }
         assertTrue("No Model found", model != null);
         return model;
-    }
-
-    private String arrayToString(String[] strings) {
-        if(strings==null) {
-            return "null";
-        }
-        StringBuilder sb = new StringBuilder();
-        for (String s : strings) {
-            sb.append(s).append(',');
-        }
-        if (sb.length() > 0) {
-            sb.deleteCharAt(sb.length() - 1);
-        }
-        return sb.toString();
     }
 }

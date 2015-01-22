@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.portlet.PortletSession;
 import javax.portlet.StateAwareResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;

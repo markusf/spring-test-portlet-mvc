@@ -1,12 +1,42 @@
 package org.springframework.test.web.portlet.server.request;
 
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
+
+import org.springframework.http.HttpMethod;
 import org.springframework.mock.web.portlet.MockActionRequest;
 
-public class MockActionRequestBuilder implements ActionRequestBuilder {
+public class MockActionRequestBuilder extends MockClientDataRequestBuilder implements
+        ActionRequestBuilder {
 
-	public MockActionRequest buildRequest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public MockActionRequestBuilder param(String name, String... values) {
+        addParameter(name, values);
+        return this;
+    }
 
+    public MockActionRequestBuilder preferences(String name, String... values) {
+        addPreference(name, values);
+        return this;
+    }
+
+    public MockActionRequestBuilder mode(PortletMode mode) {
+        setPortletMode(mode);
+        return this;
+    }
+
+    public MockActionRequestBuilder windowState(WindowState windowState) {
+        setWindowState(windowState);
+        return this;
+    }
+
+    public MockActionRequestBuilder method(HttpMethod method) {
+        setMethod(method);
+        return this;
+    }
+
+    public MockActionRequest buildRequest() {
+        MockActionRequest request = new MockActionRequest();
+        setAll(request);
+        return request;
+    }
 }

@@ -18,6 +18,11 @@ public class MockActionRequestBuilder extends MockPortletRequestBuilder implemen
         return this;
     }
 
+    public MockActionRequestBuilder attribute(String name, String... values) {
+        addAttribute(name, values);
+        return this;
+    }
+
     public MockActionRequestBuilder mode(PortletMode portletMode) {
         setPortletMode(portletMode);
         return this;

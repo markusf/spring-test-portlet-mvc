@@ -19,6 +19,7 @@ public abstract class MockPortletRequestBuilder {
 
     private final MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
     private final MultiValueMap<String, String> preferences = new LinkedMultiValueMap<String, String>();
+    private final MultiValueMap<String, String> attributes = new LinkedMultiValueMap<String, String>();
 
     private final Map<String, Object> sessionPortletAttributes = new HashMap<String, Object>();
     private final Map<String, Object> sessionApplicationAttributes = new HashMap<String, Object>();
@@ -32,6 +33,10 @@ public abstract class MockPortletRequestBuilder {
 
     protected void addPreference(String name, String... values) {
         addToMultiValueMap(this.preferences, name, values);
+    }
+
+    protected void addAttribute(String name, String... values) {
+        addToMultiValueMap(this.attributes, name, values);
     }
 
     protected void setPortletMode(PortletMode portletMode) {

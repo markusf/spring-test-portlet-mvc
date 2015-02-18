@@ -61,6 +61,19 @@ public class RenderParametersResultMatchers {
 		};
 	}
 
+    public PortletResultMatcher doesNotExist(final String... names) {
+        return new PortletResultMatcher() {
+            public void match(PortletMvcResult portletMvcResult) throws Exception {
+                MockActionResponse mockActionResponse = getActionResponse(portletMvcResult);
+                for (String name : names) {
+                    MatcherAssert.assertThat("Unexpected render parameter '" + name + "'",
+                            mockActionResponse.getRenderParameterMap().keySet(),
+                            Matchers.not(Matchers.hasItem(name)));
+                }
+            }
+        };
+    }
+
     public PortletResultMatcher count(final int count) {
         return new PortletResultMatcher() {
             public void match(PortletMvcResult result) throws Exception {

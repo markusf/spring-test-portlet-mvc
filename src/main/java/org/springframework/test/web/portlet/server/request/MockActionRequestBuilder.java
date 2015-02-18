@@ -19,8 +19,8 @@ public class MockActionRequestBuilder extends MockClientDataRequestBuilder imple
         return this;
     }
 
-    public MockActionRequestBuilder attribute(String name, String... values) {
-        addAttribute(name, values);
+    public MockActionRequestBuilder attribute(String name, Object value) {
+        addAttribute(name, value);
         return this;
     }
 

@@ -38,7 +38,9 @@ public class BasicTests {
                         .mode(PortletMode.VIEW)
                         .windowState(WindowState.NORMAL)
                         .param("action", "createNew"))
-                .andExpect(model().attributeExists("person")).andExpect(preferences().count(0))
+                .andExpect(model().attributeExists("person"))
+                .andExpect(model().attributeDoesNotExist("animal"))
+                .andExpect(preferences().count(0))
                 .andExpect(renderParameters().count(1))
                 .andExpect(renderParameters().exists("view"))
                 .andExpect(renderParameters().has("view", "editPersonForm")).andReturn();

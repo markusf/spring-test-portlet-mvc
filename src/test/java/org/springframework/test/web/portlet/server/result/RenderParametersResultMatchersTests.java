@@ -78,6 +78,16 @@ public class RenderParametersResultMatchersTests {
     }
 
     @Test
+    public void doesNotExist() throws Exception {
+        this.matchers.doesNotExist("key1").match(this.mvcResult);
+    }
+
+    @Test(expected=AssertionError.class)
+    public void doesNotExist_Fails() throws Exception {
+        this.matchers.doesNotExist("key").match(this.mvcResult);
+    }
+
+    @Test
     public void count() throws Exception {
         this.matchers.count(1).match(this.mvcResult);
     }

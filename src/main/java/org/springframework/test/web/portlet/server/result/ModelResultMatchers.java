@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.portlet.PortletSession;
 import javax.portlet.StateAwareResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -30,6 +31,8 @@ import org.springframework.test.web.portlet.server.PortletMvcResult;
 import org.springframework.test.web.portlet.server.PortletResultMatcher;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.BindingResultUtils;
+import org.springframework.web.portlet.DispatcherPortlet;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
@@ -54,6 +57,17 @@ public class ModelResultMatchers {
 		return attribute(name, Matchers.equalTo(value));
 	}
 
+    public PortletResultMatcher attributeDoesNotExist(final String... names) {
+        return new PortletResultMatcher() {
+            public void match(PortletMvcResult portletMvcResult) throws Exception {
+                Map<String, Object> model = getModel(portletMvcResult);
+                for (String name : names) {
+                    assertTrue("Did not expect the attribute: " + name, null == model.get(name));
+                }
+            }
+        };
+    }
+
 	public PortletResultMatcher attributeExists(final String... names) {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult result) throws Exception {
@@ -69,7 +83,7 @@ public class ModelResultMatchers {
 			public void match(PortletMvcResult portletMvcResult) throws Exception {
 			    Map<String, Object> model = getModel(portletMvcResult);
 				for (String name : names) {
-					BindingResult result = getBindingResult(model, name);
+					BindingResult result = BindingResultUtils.getRequiredBindingResult(model, name);
 					assertTrue("No errors for attribute: " + name, result.hasErrors());
 				}
 			}
@@ -81,7 +95,7 @@ public class ModelResultMatchers {
 			public void match(PortletMvcResult PortletMvcResult) throws Exception {
 			    Map<String, Object> model = getModel(PortletMvcResult);
 				for (String name : names) {
-					BindingResult result = getBindingResult(model, name);
+					BindingResult result = BindingResultUtils.getRequiredBindingResult(model, name);
 					assertTrue("No errors for attribute: " + name, !result.hasErrors());
 				}
 			}
@@ -92,7 +106,7 @@ public class ModelResultMatchers {
 		return new PortletResultMatcher() {
 			public void match(PortletMvcResult PortletMvcResult) throws Exception {
 			    Map<String, Object> model = getModel(PortletMvcResult);
-				BindingResult result = getBindingResult(model, name);
+				BindingResult result = BindingResultUtils.getRequiredBindingResult(model, name);
 				assertTrue("No errors for attribute: '" + name + "'", result.hasErrors());
 				for (final String fieldName : fieldNames) {
 					assertTrue("No errors for field: '" + fieldName + "' of attribute: " + name,
@@ -137,6 +151,15 @@ public class ModelResultMatchers {
             model = mav.getModel();
         } else {
             if (portletMvcResult.getResponse() instanceof StateAwareResponse) {
+                StateAwareResponse response = (StateAwareResponse) portletMvcResult.getResponse();
+                // check if there are action exceptions
+                assertTrue(
+                        "No actionExceptions expected, but got: "
+                                + StringUtils.join(response.getRenderParameterMap().get(
+                                        DispatcherPortlet.ACTION_EXCEPTION_RENDER_PARAMETER)),
+                        !response.getRenderParameterMap().containsKey(
+                                DispatcherPortlet.ACTION_EXCEPTION_RENDER_PARAMETER));
+                // look for implicit model in session
                 PortletSession session = portletMvcResult.getRequest().getPortletSession(false);
                 if (session != null) {
                     ExtendedModelMap implicitModel = (ExtendedModelMap) session
@@ -150,11 +173,4 @@ public class ModelResultMatchers {
         assertTrue("No Model found", model != null);
         return model;
     }
-
-	private BindingResult getBindingResult(Map<String, Object> model, String name) {
-		BindingResult result = (BindingResult) model.get(BindingResult.MODEL_KEY_PREFIX + name);
-		assertTrue("No BindingResult for attribute: " + name, result != null);
-		return result;
-	}
-
 }

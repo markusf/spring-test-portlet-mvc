@@ -49,6 +49,14 @@ public abstract class MockPortletRequestBuilder {
         this.windowState = windowState;
     }
 
+    protected void addSessionPortletAttribute(String name, Object attribute) {
+        this.sessionPortletAttributes.put(name, attribute);
+    }
+
+    protected void addSessionApplicationAttribute(String name, Object attribute) {
+        this.sessionApplicationAttributes.put(name, attribute);
+    }
+
     protected void addSessionPortletAttributes(Map<String, Object> sessionPortletAttributes) {
         this.sessionPortletAttributes.putAll(sessionPortletAttributes);
     }

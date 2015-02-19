@@ -19,6 +19,11 @@ public class MockActionRequestBuilder extends MockClientDataRequestBuilder imple
         return this;
     }
 
+    public MockActionRequestBuilder attribute(String name, Object value) {
+        addAttribute(name, value);
+        return this;
+    }
+
     public MockActionRequestBuilder mode(PortletMode mode) {
         setPortletMode(mode);
         return this;

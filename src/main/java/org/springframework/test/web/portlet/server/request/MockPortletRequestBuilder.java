@@ -71,7 +71,7 @@ public abstract class MockPortletRequestBuilder {
         setAttributes(request);
         request.setPortletMode(this.portletMode);
         request.setWindowState(this.windowState);
-        if(!sessionPortletAttributes.isEmpty() || !sessionApplicationAttributes.isEmpty() ) {
+        if (!sessionPortletAttributes.isEmpty() || !sessionApplicationAttributes.isEmpty()) {
             PortletSession session = request.getPortletSession();
             addAttributes(session, sessionPortletAttributes, PortletSession.PORTLET_SCOPE);
             addAttributes(session, sessionApplicationAttributes, PortletSession.APPLICATION_SCOPE);

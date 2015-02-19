@@ -39,8 +39,7 @@ public class MockActionRequestBuilder extends MockClientDataRequestBuilder imple
         return this;
     }
 
-    public MockActionRequestBuilder sessionAttribute(String name, Object attribute) {
-        addSessionApplicationAttribute(name, attribute);
+    public MockActionRequestBuilder sessionPortletAttribute(String name, Object attribute) {
         addSessionPortletAttribute(name, attribute);
         return this;
     }

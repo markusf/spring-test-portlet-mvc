@@ -19,6 +19,7 @@ public abstract class MockPortletRequestBuilder {
 
     private final MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
     private final MultiValueMap<String, String> preferences = new LinkedMultiValueMap<String, String>();
+    private final Map<String, Object> attributes = new HashMap<String, Object>();
 
     private final Map<String, Object> sessionPortletAttributes = new HashMap<String, Object>();
     private final Map<String, Object> sessionApplicationAttributes = new HashMap<String, Object>();
@@ -34,6 +35,10 @@ public abstract class MockPortletRequestBuilder {
         addToMultiValueMap(this.preferences, name, values);
     }
 
+    protected void addAttribute(String name, Object value) {
+        this.attributes.put(name, value);
+    }
+
     protected void setPortletMode(PortletMode portletMode) {
         Assert.notNull(portletMode, "'portletMode' is required");
         this.portletMode = portletMode;
@@ -42,6 +47,14 @@ public abstract class MockPortletRequestBuilder {
     protected void setWindowState(WindowState windowState) {
         Assert.notNull(windowState, "'windowState' is required");
         this.windowState = windowState;
+    }
+
+    protected void addSessionPortletAttribute(String name, Object attribute) {
+        this.sessionPortletAttributes.put(name, attribute);
+    }
+
+    protected void addSessionApplicationAttribute(String name, Object attribute) {
+        this.sessionApplicationAttributes.put(name, attribute);
     }
 
     protected void addSessionPortletAttributes(Map<String, Object> sessionPortletAttributes) {
@@ -55,9 +68,10 @@ public abstract class MockPortletRequestBuilder {
     protected void setAll(MockPortletRequest request) {
         setParameters(request);
         setPreferences(request);
+        setAttributes(request);
         request.setPortletMode(this.portletMode);
         request.setWindowState(this.windowState);
-        if(!sessionPortletAttributes.isEmpty() || !sessionApplicationAttributes.isEmpty() ) {
+        if (!sessionPortletAttributes.isEmpty() || !sessionApplicationAttributes.isEmpty()) {
             PortletSession session = request.getPortletSession();
             addAttributes(session, sessionPortletAttributes, PortletSession.PORTLET_SCOPE);
             addAttributes(session, sessionApplicationAttributes, PortletSession.APPLICATION_SCOPE);
@@ -95,6 +109,12 @@ public abstract class MockPortletRequestBuilder {
         Assert.notEmpty(values, "'values' must not be empty");
         for (T value : values) {
             map.add(name, value);
+        }
+    }
+
+    public void setAttributes(MockPortletRequest request) {
+        for (Map.Entry<String, Object> entry : this.attributes.entrySet()) {
+            request.setAttribute(entry.getKey(), entry.getValue());
         }
     }
 }
